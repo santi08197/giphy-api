@@ -1,5 +1,13 @@
 Challenge PHP - Santiago Gonzalez
 
+Dockerfile
+    - Abrir una terminal en el directorio raíz del proyecto y ejecutar:
+    $ docker build -t nombre-imagen .
+    Reemplazar nombre-imagen con el nombre deseado.
+
+    Luego de construir la imagen Docker se puede ejecutar un contenedor utilizando esta imagen:
+    $ docker run -p 8000:80 nombre-imagen
+
 Si el dockerfile no funciona realizar los siguiente pasos:
 
     -ejecutar $ composer install
