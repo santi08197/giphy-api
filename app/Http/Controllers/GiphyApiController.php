@@ -64,6 +64,14 @@ class GiphyApiController extends Controller
             'user_id' => 'required|integer',
         ]);
         
+        $existingBookmark = Bookmark::where('gif_id', $validated['gif_id'])
+                                ->where('user_id', $validated['user_id'])
+                                ->exists();
+
+        if ($existingBookmark) {
+            return response()->json(['message' => 'This GIF is already bookmarked.'], 400);
+        }
+        
 		try{
             $bookmark = new Bookmark();
 			$bookmark->fill($validated);
