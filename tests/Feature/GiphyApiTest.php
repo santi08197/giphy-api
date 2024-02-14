@@ -10,11 +10,18 @@ class GiphyApiTest extends TestCase
 {
     use DatabaseTransactions;
     
+    protected function createUserWithToken()
+    {
+        $user = User::factory()->create();
+        $token = $user->createToken('TestToken')->accessToken;
+
+        return $token;
+    }
+
     public function testGetGifById(): void
     {
         
-        $user = User::factory()->create();
-        $token = $user->createToken('TestToken')->accessToken;
+        $token = $this->createUserWithToken();
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
@@ -30,8 +37,7 @@ class GiphyApiTest extends TestCase
     public function testGetGifByIdMustFailIfIdDoesntExist(): void
     {
         
-        $user = User::factory()->create();
-        $token = $user->createToken('TestToken')->accessToken;
+        $token = $this->createUserWithToken();
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
@@ -44,8 +50,7 @@ class GiphyApiTest extends TestCase
 
     public function testGetGifsMustResturnTwoRegisters(): void
     {
-        $user = User::factory()->create();
-        $token = $user->createToken('TestToken')->accessToken;
+        $token = $this->createUserWithToken();
 
         $data = [
             'q' => 'guitar',
@@ -68,8 +73,7 @@ class GiphyApiTest extends TestCase
             'alias' => 'test',
         ];
 
-        $user = User::factory()->create();
-        $token = $user->createToken('TestToken')->accessToken;
+        $token = $this->createUserWithToken();
         
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
