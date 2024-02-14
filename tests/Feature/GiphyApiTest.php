@@ -18,7 +18,7 @@ class GiphyApiTest extends TestCase
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->json('GET', '/api/gif/tJU72w9lPzUPe');
+        ])->json('GET', '/api/gifs/tJU72w9lPzUPe');
         
         $response->assertStatus(200);
         $response->assertJsonStructure([
@@ -35,7 +35,7 @@ class GiphyApiTest extends TestCase
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->json('GET', '/api/gif/aaa');
+        ])->json('GET', '/api/gifs/aaa');
         
         $response->assertStatus(401);
     }
@@ -49,23 +49,23 @@ class GiphyApiTest extends TestCase
 
         $data = [
             'q' => 'guitar',
-            'limit' => '3',
+            'limit' => '2',
         ];
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
             'Accept' => 'application/json',
-        ])->json('GET', '/api/gif/', $data);
+        ])->json('GET', '/api/gifs/', $data);
 
         $response->assertStatus(200);
-        $response->assertJsonPath('pagination.count', 3);
+        $response->assertJsonPath('pagination.count', 2);
     }
 
     public function testPostBookmark(): void
     {
         $requestData = [
-            'gif_id' => 'tJU72w9lPzUPe',
-            'alias' => 'guitar_gif_test',
+            'gif_id' => 'ihwf3TcW5d3k5ascQ4',
+            'alias' => 'test',
             'user_id' => 11,
         ];
 
@@ -75,13 +75,13 @@ class GiphyApiTest extends TestCase
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
             'Accept' => 'application/json',
-        ])->post('/api/gif/bookmark/', $requestData);
+        ])->post('/api/gifs/bookmarks/', $requestData);
 
         $this->assertDatabaseHas('bookmarks', [
-            'gif_id' => 'tJU72w9lPzUPe',
-            'alias' => 'guitar_gif_test',
+            'gif_id' => 'ihwf3TcW5d3k5ascQ4',
+            'alias' => 'test',
             'user_id' => 11,
         ]);
         $response->assertStatus(201);
-}
+    }
 }
