@@ -66,7 +66,6 @@ class GiphyApiTest extends TestCase
         $requestData = [
             'gif_id' => 'ihwf3TcW5d3k5ascQ4',
             'alias' => 'test',
-            'user_id' => 11,
         ];
 
         $user = User::factory()->create();
@@ -80,7 +79,6 @@ class GiphyApiTest extends TestCase
         $this->assertDatabaseHas('bookmarks', [
             'gif_id' => 'ihwf3TcW5d3k5ascQ4',
             'alias' => 'test',
-            'user_id' => 11,
         ]);
         $response->assertStatus(201);
     }
