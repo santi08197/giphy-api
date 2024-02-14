@@ -24,7 +24,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:api')->group(function () {
-    Route::get('gif', [GiphyApiController::class, 'searchGifs']);
-    Route::get('/gif/{gifId}', [GiphyApiController::class, 'getGifById']);
-    Route::post('/gif/bookmark', [GiphyApiController::class, 'bookmarkGif']);
+    Route::get('gifs', [GiphyApiController::class, 'searchGifs']);
+    Route::get('/gifs/{gifId}', [GiphyApiController::class, 'getGifById']);
+    Route::post('/gifs/bookmarks', [GiphyApiController::class, 'bookmarkGif']);
 });
