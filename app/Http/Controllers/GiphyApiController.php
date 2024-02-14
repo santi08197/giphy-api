@@ -25,17 +25,19 @@ class GiphyApiController extends Controller
             'offset' => 'integer',
         ]);
         
-        if (Auth::check()) {
+        try {
             $limit = isset($validated['limit']) ? $validated['limit'] : null;
             $offset = isset($validated['offset']) ? $validated['offset'] : 0;
             
             $gifs = $this->giphyService->searchGifs($validated['q'], $limit, $offset);
             
             $response = response()->json($gifs);
-    
-            RequestLogController::saveRequestLog($request, $response, 'Search Gifs');
-            return $response;
+        } catch (\Exception $e) {
+            $response = response()->json(['error' => $e->getMessage()], 401);
         }
+
+        RequestLogController::saveRequestLog($request, $response, 'Search Gifs');
+        return $response;
     }
 
     public function getGifById(Request $request, $gifId)

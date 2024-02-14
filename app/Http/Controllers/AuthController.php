@@ -18,16 +18,22 @@ class AuthController extends Controller
         ]);
 
         $credentials = $request->only('email', 'password');
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            $token = $user->createToken('AuthToken')->accessToken;
-            
-            return response()->json([
-                'token' => $token,
-                'expires_in' => now()->addMinutes(config('auth.guards.api.expire_in_minutes')),
-            ]);
+        try{
+            if (Auth::attempt($credentials)) {
+                $user = Auth::user();
+                $token = $user->createToken('AuthToken')->accessToken;
+                
+                $response = response()->json([
+                    'token' => $token,
+                    'expires_in' => now()->addMinutes(config('auth.guards.api.expire_in_minutes')),
+                ]);
+            }
+        }catch(\Exception $e){
+            $response = response()->json(['error' => 'Invalid credentials'], 401);
         }
 
-        return response()->json(['error' => 'Invalid credentials'], 401);
+        RequestLogController::saveRequestLog($request, $response, 'Login');
+
+        return $response;
     }
 }
