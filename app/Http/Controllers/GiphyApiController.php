@@ -61,11 +61,11 @@ class GiphyApiController extends Controller
         $validated = $request->validate([
             'gif_id' => 'required|string',
             'alias' => 'required|string',
-            'user_id' => 'required|integer',
         ]);
         
+        $user_id= Auth::user()['id'];
         $existingBookmark = Bookmark::where('gif_id', $validated['gif_id'])
-                                ->where('user_id', $validated['user_id'])
+                                ->where('user_id', $user_id)
                                 ->exists();
 
         if ($existingBookmark) {
@@ -75,6 +75,7 @@ class GiphyApiController extends Controller
 		try{
             $bookmark = new Bookmark();
 			$bookmark->fill($validated);
+            $bookmark->user_id = $user_id;
 			if($bookmark->save()){
 				$response = response()->json($bookmark,201);
 			}
